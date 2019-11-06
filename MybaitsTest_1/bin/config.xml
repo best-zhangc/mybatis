@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+			<!--通过 environments的default值和 environment的Id值来指定Mybaits运行时的数据库环境-->
+		 <environments default="development">
+		 	<!-- 开发环境（自己的计算机） -->
+			 <environment id="development">
+			 <!-- 事务提交方式：
+			 		JDBC：利用JDBC处理事务（commit close rollback）
+			 		MANAGED(managed):将事务交由其他组件去托管（spring,jobss),默认会关闭连接
+			 		不想关闭时
+			 		<transactionManager type="MANAGED"/>
+			 		 <property name="closeConnection" value="false"/>此时默认不关闭	
+			  -->
+			 	<transactionManager type="JDBC"/>
+			 	<!-- 数据源：
+			 		NUPOOLED:传统的JDBC模式（每次访问数据库均需打开、关闭等数据库操作 但是打开
+			 		关闭等数据库操作是比较消耗性能的）
+			 		POOLED:(三方的)使用数据库连接池
+			 		JNDI:从tomcat服务器中获取一个内置的数据库连接池(数据库连接池-数据源)
+			 	 -->
+			 <dataSource type="POOLED">
+			 <!--配置数据库信息  -->
+				 <property name="driver" value="com.mysql.jdbc.Driver"/>
+				 <property name="url" value="jdbc:mysql://localhost:3306/bookshop_ssh"/>
+				 <property name="username" value="root"/>
+				 <property name="password" value="1234"/>
+			 </dataSource>
+			 </environment>
+		 </environments>
+		 <mappers>
+		 <!--加载映射文件  -->
+			 <mapper resource="com/zc/mybaits/mapper/bookMapper.xml"/>
+		 </mappers>
+</configuration>
