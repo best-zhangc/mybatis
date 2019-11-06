@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <!-- namespace该mapper.xml映射文件的唯一标识 -->
+<mapper namespace="com.zc.mybaits.bookMapper">
+	<!--resultType 返回值类型  parameterType输入参数类型 -->
+	 <select id="queryBookById" resultType="com.zc.mybaits.Book" parameterType="int">
+	 		select * from book_1 where bookId = #{id}
+	 </select>
+	 
+	<insert id="addBook" parameterType="com.zc.mybaits.Book">
+			insert  into  book_1(bookId,bookName,bookPrice) values(#{bookId},#{bookName},#{bookPrice})	
+	</insert>
+	
+	<select id="queryAllBook" resultType="com.zc.mybaits.Book">
+	 		select * from book_1
+	 </select>	 
+</mapper>
