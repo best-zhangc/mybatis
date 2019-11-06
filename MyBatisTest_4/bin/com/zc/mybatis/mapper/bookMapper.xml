@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+			"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <!-- namespace该mapper.xml映射文件的唯一标识 -->
+<mapper namespace="com.zc.mybatis.mapper.BookMapper">
+
+	<!-- 添加 -->
+	<insert id="addBook" parameterType="book">
+			insert  into  book_1(bookId,bookName,bookPrice) values(#{bookId},#{bookName},#{bookPrice})	
+	</insert>
+	
+	<!--删除 -->
+	<delete id="deleteBookById" parameterType="int">
+		delete   from book_1 where bookId = #{bookId}
+	</delete>
+	
+	<!--修改  -->
+	<update id="updateBookById" parameterType="book">
+		update book_1 set bookName=#{bookName},bookPrice=#{bookPrice} where bookId=#{bookId}
+	</update>
+	
+	<!--resultType 返回值类型  parameterType输入参数类型 -->
+	<!-- 按书号查询 -->
+	 <select id="queryBookById" parameterType="int" resultMap="bookMapping">
+	 		select * from book_1 where bookId = #{bookId}
+	 </select>
+	 <!--按书名查询  -->
+	  <select id="queryBookBybookName" parameterType="String" resultType="book">
+	 		select bookId,bookName,bookPrice from book_1 where bookName= '${value}'
+	 </select>
+	 
+	 <!--查询全部书 根据书名排序  -->
+	 <select id="queryBookOrderByBookColumn" parameterType="String" resultType="Book">
+	 	select bookId, bookName, bookPrice from book_1 order by ${value} asc
+	 </select>
+	 <!-- 根据书名或价格查询  -->
+	 <select id="queryBookBybookPriceOrbookName" parameterType="book" resultType="Book">
+	 	select bookId, bookName, bookPrice from book_1 where bookPrice = #{bookPrice} or bookName like '%${bookName}%'
+	 </select>
+	 
+	 <!-- 根据类型或简介查询  -->
+	 <!--  <select id="queryBookByExplain" parameterType="explain" resultType="Book">
+	 	select bookId, bookName, bookPrice from book_1 where bookCategory = #{bookCategory} or bookDescription='${bookDescription}'
+	 </select>-->
+	 <!--输入参数为级联属性  -->
+	 <select id="queryBookByExplain" parameterType="book" resultType="Book">
+	 	select bookId, bookName, bookPrice from book_1 where bookCategory = #{explain.bookCategory} or bookDescription='${explain.bookDescription}'
+	 </select>
+	 
+	 <resultMap type="book" id="bookMapping">
+	 		<!--主键id和非主键Result  -->
+		 	<id property="bookId" column="bookId"/>
+		 	<result property="bookName" column="bookName"/>
+		 	<result property="bookPrice" column="bookPrice"/>
+		 	<result property="bookSell" column="bookSell" javaType="boolean" jdbcType="INTEGER"/>
+	 </resultMap>
+	 
+	 
+	<!--查询全部  -->
+	<select id="queryAllBook" resultType="book">
+	 		select * from book_1
+	 </select>	 
+	 
+	 <!-- 按书号查询  (使用了转换器查)
+	 	1、如果类中的属性和表中的字段类型能够合理识别(String-Varchar) 则可以使用resultType 否则(boolean-int)使用resultMap
+	 	2、如果类中的属性名和表中的字段名类型能够合理识别(bookName-bookName)	则可以使用resultType 否则(id-bookId)使用resultMap
+	 -->
+	 <select id="queryBookByIdWithConverter" parameterType="int" resultMap="bookResult">
+	 		select * from book_1 where bookId = #{bookId}
+	 </select>
+	 <resultMap type="book" id="bookResult">
+	 		<!--主键id和非主键Result  -->
+		 	<id property="bookId" column="bookId"/>
+		 	<result property="bookName" column="bookName"/>
+		 	<result property="bookPrice" column="bookPrice"/>
+		 	<result property="bookSell" column="bookSell" javaType="boolean" jdbcType="INTEGER"/>
+	 </resultMap>
+	 
+	 <!-- 添加带转换器-->
+	<insert id="addBookWithConverter" parameterType="book">
+			insert  into  book_1(bookId,bookName,bookPrice,bookSell) values(#{bookId},#{bookName},#{bookPrice},#{bookSell,javaType=boolean,jdbcType=INTEGER})	
+	</insert>
+</mapper>
