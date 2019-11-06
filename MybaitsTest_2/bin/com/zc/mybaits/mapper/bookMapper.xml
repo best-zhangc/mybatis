@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <!-- namespace该mapper.xml映射文件的唯一标识 -->
+<mapper namespace="com.zc.mybaits.mapper.BookMapper">
+	<!-- 添加 -->
+	<insert id="addBook" parameterType="book">
+			insert  into  book_1(bookId,bookName,bookPrice) values(#{bookId},#{bookName},#{bookPrice})	
+	</insert>
+	
+	<!--删除 -->
+	<delete id="deleteBookById" parameterType="int">
+		delete   from book_1 where bookId = #{bookId}
+	</delete>
+	<!--修改  -->
+	<update id="updateBookById" parameterType="book">
+		update book_1 set bookName=#{bookName},bookPrice=#{bookPrice} where bookId=#{bookId}
+	</update>
+	<!--resultType 返回值类型  parameterType输入参数类型 -->
+	<!-- 按书号查询 -->
+	 <select id="queryBookById" parameterType="int" resultType="book">
+	 		select * from book_1 where bookId = #{bookId}
+	 </select>
+	 
+	<!--查询全部  -->
+	<select id="queryAllBook" resultType="book">
+	 		select * from book_1
+	 </select>	 
+</mapper>
