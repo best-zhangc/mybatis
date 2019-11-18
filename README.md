@@ -113,11 +113,33 @@ a.创建转换器
   在使用MyBatis框架时 主要涉及以下几个API
   
   * SqlSessionFactoryBuilder 
+
      - 该对象负责根据MyBatis配置文件 SqlMapConfig.xml 构建 SqlSessionFactory实列
      
   * SqlSessionFactory
+
      - 每一个MyBatis的应用程序都以一个SqlSessionFactory 对象为核心 该对象负责创建sqlSession 实列
-  *
+
+  *SqlSession 
+
+   -该对象包含了所有执行SQL操作的方法 ， 用于执行以映射的SQL语句
+   
+# 五、MyBatis体系结构
+ * 1) 加载配置
+ 
+   - 配置有两种形式 一种是XML配置文件 ， 另一种是java代码的注解 MyBatis将SQL的配置加载成一个个的MapppedStatement对象（包括传入参数配置，执行的SQL语句 ， 结构映射配置并将其存储在内存中）
+   
+ * 2)SQL解析
+  
+   - 当API接口层接收到调用请求时，会接收到传入SQL的ID和传入对象（可以是Map，JavaBean或者基本数据类型）， Mybatis会根据SQL的ID 找到对应的MappedStatement进行解析，解析后可以得到最终要执行的SQL语句和参数
+   
+ * 3)SQL执行
+  
+   - 最终的到的SQL和参数拿到数据库去执行，得到操作数据库的结果
+   
+ * 4)结果映射
+ 
+   - 将操作数据库的结果按照映射的配置进行转换，可以转换成hashMap ，JavaBean或者基本数据类型并将最终结果返回
 	
 	
  
