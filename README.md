@@ -100,11 +100,11 @@ a.创建转换器
 # 三、MyBatis配置文件
  + MyBatis框架的xml配置包含两种类型：
  
- * 1) SqlMapConfig.xml (1个)
+ * 1)SqlMapConfig.xml (1个)
  
 	 — 主配置文件， 用于指定数据库连接参数和框架参数
 	 
- * 2) SqlMap.xml (n个)
+ * 2)SqlMap.xml (n个)
  
  	— 映射定义文件， 用于定义 sql 语句和映射信息 
 
