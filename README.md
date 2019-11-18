@@ -120,9 +120,9 @@ a.创建转换器
 
      - 每一个MyBatis的应用程序都以一个SqlSessionFactory 对象为核心 该对象负责创建sqlSession 实列
 
-  *SqlSession 
+  * SqlSession 
 
-   -该对象包含了所有执行SQL操作的方法 ， 用于执行以映射的SQL语句
+    - 该对象包含了所有执行SQL操作的方法 ， 用于执行以映射的SQL语句
    
 # 五、MyBatis体系结构
 
