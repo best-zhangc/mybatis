@@ -114,6 +114,10 @@ a.创建转换器
   
   * SqlSessionFactoryBuilder 
      - 该对象负责根据MyBatis配置文件 SqlMapConfig.xml 构建 SqlSessionFactory实列
+     
+  * SqlSessionFactory
+     - 每一个MyBatis的应用程序都以一个SqlSessionFactory 对象为核心 该对象负责创建sqlSession 实列
+  *
 	
 	
  
