@@ -7,7 +7,7 @@ import org.tarena.entity.Emp;
 @MyBatisRepository
 public interface EmpDao {
 	void save(Emp emp);
-	//一对一
+	//一对一 
 	Emp findById(int empno	);
 	Emp findById2(int empno) ;
 }
