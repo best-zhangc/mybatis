@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xmlns:context="http://www.springframework.org/schema/context"
+	 xmlns:util = "http://www.springframework.org/schema/util"
+	 xmlns:jee =" http://www.springframework.org/schema/jee"
+	 xmlns:tx ="http://www.springframework.org/schema/tx"
+	 xmlns:jdbc ="http://www.springframework.org/schema/jdbc"
+	 xmlns:jpa = "http://www.springframework.org/schema/data/jpa"
+	 xmlns:mvc="http://www.springframework.org/schema/mvc"
+	 xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	        http://www.springframework.org/schema/beans/spring-beans.xsd
+	          						http://www.springframework.org/schema/context
+	        http://www.springframework.org/schema/context/spring-context.xsd
+	        						http://www.springframework.org/schema/util 
+	        http://www.springframework.org/schema/util/spring-util.xsd
+	        						http://www.springframework.org/schema/jee 
+	        http://www.springframework.org/schema/jee/spring-jee.xsd
+	         						http://www.springframework.org/schema/tx 
+	         http://www.springframework.org/schema/tx/spring-tx.xsd 
+	         						http://www.springframework.org/schema/jdbc 
+	         http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+	         						http://www.Springframework.org/schema/data/jpa
+	         http://www.Springframework.org/schema/data/jpa/spring-jpa.xsd
+	        						http://www.springframework.org/schema/aop
+	         http://www.springframework.org/schema/aop/spring-aop.xsd
+	         						http://www.springframework.org/schema/mvc 
+	         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+	         
+	 <!--配置数据源  -->       
+	<bean id="myDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/emp" />
+		<property name="username" value="root" />
+		<property name="password" value="1234" />
+	</bean>
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="myDataSource" />
+		<property name="mapperLocations" value="classpath:org/tarena/entity/*.xml" />
+	</bean>
+	
+	<!--配置MyBatis注解 和指定包扫描  -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+		<property name="basePackage" value="org.tarena" />
+		<property name="annotationClass" value="org.tarena.annotation.MyBatisRepository" />
+	</bean> 
+	
+	<!--组件扫描   -->
+	<context:component-scan base-package="org.tarena" />
+	<!--开启RequestMapping注解  -->
+	<mvc:annotation-driven/>
+	
+	<!--处理请求转发  -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<!--声明方面组件  -->
+	<!-- <bean id="OperateLogger" class="org.tarena.aspect.OperateLogger" /> -->
+	
+	<!--配置AOP  -->
+	<!-- <aop:config>
+		<aop:aspect ref="OperateLogger">
+			<aop:before method="log1" pointcut="within(org.tarena.controller..*)" />
+		</aop:aspect>
+	</aop:config> -->
+	   
+	 <!--开启Aop注解扫描  -->  
+	 <aop:aspectj-autoproxy proxy-target-class="true" />
+</beans>
