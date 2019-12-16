@@ -50,7 +50,7 @@
 	<context:component-scan base-package="org.tarena" />
 	<!--开启requestMapping注解   -->
 	<mvc:annotation-driven />
-	<!--处理请求转发  -->
+	<!--处理请求转发 -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
 		<property name="prefix" value="/WEB-INF/jsp/" />
 		<property name="suffix" value=".jsp" />
