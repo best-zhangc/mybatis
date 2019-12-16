@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="org.tarena.dao.EmpDao">
+ <!--主键映射 新增一条数据  -->
+<!-- 1) 自动递增 mysql和SQLserver数据库--> 
+	<insert id="save" parameterType="org.tarena.entity.Emp" useGeneratedKeys="true" keyProperty="empno" >
+		insert into emp_t(ename , sal , age , deptno)  values(#{ename} , #{sal} , #{age} , #{deptno})
+	</insert>
+	
+<!-- 2) 非自动递增 oracle数据库-->
+<!-- 	<insert id="save" parameterType="org.tarena.entity.Emp">
+		<selectKey keyProperty="empno" order="BEFORE" resultType="java.lang.Integer">
+			select emp_seq.nextval from dual
+		</selectKey>
+		insert into emp_t values(
+			#{empno}
+			#{ename , jdbcType=VARCHAR}
+			#{sal , jdbcType=DOUBLE}
+			#{age , jdbcType=INT}
+			#{deptno , jdbcType=INT}
+		)
+	</insert> -->
+	
+	<!--使用嵌套查询 根据Id查询一条员工数据时关联查询对应的部门  -->
+	<select id="findById" parameterType="java.lang.Integer"
+	resultMap="empMap">
+		select * from emp_t where empno = #{empno}
+	</select>
+	
+	<select id="findDept" parameterType="java.lang.Integer" resultType="org.tarena.entity.Dept">
+		select * from t_dep where deptno = #{deptno}
+	</select>
+	
+	<resultMap type="org.tarena.entity.Emp" id="empMap">
+		<association property="dept" column="deptno" 
+		javaType="org.tarena.entity.Dept" select="findDept"></association>
+	</resultMap>
+	
+	
+	<!--使用嵌套查询结果 在查询一条员工数据时 关联查询出对应部门  -->
+	<select id="findById2" parameterType="java.lang.Integer" resultMap="empMap">
+		select e.* , d.* from emp_t e inner join t_dep d on e.deptno = d.deptno where e.empno = #{empno}
+	</select>
+	<resultMap type="org.tarena.entity.Emp" id="empMap2">
+		<id property="empno" column="empno"/>
+		<result property="ename" column="ename"/>
+		<result property="sal" column="sal"/>
+		<result property="age" column="age"/>
+		<result property="deptno" column="deptno"/>
+		
+		<!-- association标签来解决一对一的关联查询  association标签可用的属性：
+		property:对象属性的名称
+		javaType:对象属性的类型
+		column:所对应的外键字段名称
+		select:使用另一个查询封装的结果
+		-->
+		<association property="dept" column="deptno" javaType="org.tarena.entity.Dept">
+			<id property="deptno" column="deptno"/>
+			<result property="dname" column="dname"/>
+			<result property="loc" column="loc"/>
+		</association>
+		
+		
+	</resultMap>
+ </mapper>
