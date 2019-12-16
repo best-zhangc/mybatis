@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="org.tarena.dao.EmpDao">
+ 	<!--查询全部  -->
+ 	<select id="findAll" resultType="org.tarena.entity.Emp">
+ 		select * from emp_t 
+ 	</select>
+ 
+ 	<!--if  -->
+ 	<!--查询部门下的所有员工  -->
+ 	<select id="findByDeptno" parameterType="org.tarena.entity.Condition" 
+ 		resultType="org.tarena.entity.Emp">
+ 		select * from emp_t
+ 		<if test="deptno != null">
+ 			where deptno = #{deptno}
+ 		</if>
+ 	</select>
+ 	
+ 	<!--choose  -->
+ 	<!--查询大于当前收入的员工  -->
+ 	<select id="findBySal" parameterType="org.tarena.entity.Condition"
+ 		resultType="org.tarena.entity.Emp">
+ 		select * from emp_t
+ 		<choose>
+ 			<when test="sal>6000">
+ 				where sal > #{sal}
+ 			</when>
+ 			<otherwise>
+ 				where sal>=6000
+ 			</otherwise>
+ 		</choose>
+ 	</select>
+ 	
+ 	<!--where  -->
+ 	<!--查询当前部门下 大于当前收入的员工  -->
+ 	<select id="findByDeptAndSal" parameterType="org.tarena.entity.Condition"
+ 		resultType="org.tarena.entity.Emp">
+ 		select * from emp_t
+ 		<where>
+ 			<if test="deptno != null">
+ 				and	deptno = #{deptno}
+ 			</if>
+ 			<if test="sal != null">
+ 				and sal > #{sal}
+ 			</if>
+ 		</where>
+ 	</select>
+ 	
+ 	<!--set  -->
+ 	<!--更新员工  -->
+ 	<update id="update" parameterType="org.tarena.entity.Emp">
+ 		update emp_t 
+ 		<set>
+ 			<if test="ename != null">
+ 				ename = #{ename}
+ 			</if>
+ 			<if test="sal !=null">
+ 				sal = #{sal}
+ 			</if>
+ 			<if test="age != null">
+ 				age = #{age}
+ 			</if>
+ 			<if test="deptno != null">
+ 				deptno =#{deptno}
+ 			</if>
+ 			where empno = #{empno}
+ 		</set>
+ 	</update>
+ 	
+ 	
+ 	<!--trim  -->
+ 	<!--使用trim代替where  -->
+ 	<select id="findByDeptAndSal2"  parameterType="org.tarena.entity.Condition"
+ 	 resultType="org.tarena.entity.Emp">
+ 	 	select * from  emp_t
+ 	 	<trim prefix="where" prefixOverrides="and">
+ 	 		<if test="empno != null">
+ 	 			and empno = #{empno}
+ 	 		</if>
+ 	 		<if test="sal != null">
+ 	 			and sal > #{sal}
+ 	 		</if>
+ 	 	</trim>
+ 	 </select>
+ 	 
+ 	 <!--使用trim代替where  -->
+ 	 <update id="update2" parameterType="org.tarena.entity.Emp">
+ 	 	update emp_t 
+ 	 	<trim prefix="set" suffixOverrides=",">
+ 	 		<if test="ename != null">
+ 	 			ename = #{ename} ,
+ 	 		</if>
+ 	 		<if test="sal != null">
+ 	 			sal = #{sal} ,
+ 	 		</if>
+ 	 		<if test="age != null">
+ 	 			age = #{age} ,
+ 	 		</if>
+ 	 		<if test="deptno != null">
+ 	 			deptno = #{deptno} ,
+ 	 		</if>
+ 	 	</trim>
+ 	 		where empno = #{empno}
+ 	 </update>
+ 	 
+ 	 <!--foreach  -->
+ 	 <!--根据Id查询员工  -->
+ 	 <select id="findByIds" parameterType="org.tarena.entity.Condition"
+ 	 resultType="org.tarena.entity.Emp">
+ 	 	select * from emp_t where empno in
+ 	 	<foreach collection="empnos" 
+ 	 			open="(" close=")" separator="," item="id">
+ 	 		#{id}
+ 	 	</foreach>
+ 	 </select>
+ </mapper>
