@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="org.tarena.dao.DeptDao">
+ <!--嵌套查询  -->
+ 	<select id="findById" parameterType="java.lang.Integer" resultMap="deptMap">
+ 		select * from t_dep where deptno = #{deptno}
+ 	</select>
+ 	 <select id="findEmps" parameterType="java.lang.Integer" resultType="org.tarena.entity.Emp">
+ 	 	select * from emp_t where deptno  = #{deptno}
+ 	 </select>
+ 	 <resultMap type="org.tarena.entity.Dept" id="deptMap">
+ 	 	<id property="deptno" column="deptno"/>
+ 	 	<!--collection标签来解决一对多的关联查询，ofType属性指定集合中元素的对象类型。  -->
+ 	 	<collection property="emps" column="deptno" javaType="java.util.ArrayList"
+ 	 	select="findEmps" ofType="org.tarena.entity.Emp"></collection>
+ 	 </resultMap>
+ 	 
+<!--嵌套结果查询  -->
+	<select id="findById2" parameterType="java.lang.Integer" resultMap="deptMap2">
+		select d.* , e.* from t_dep d inner join emp_t e on d.deptno = e.deptno where d.deptno = #{deptno}
+	</select>
+	
+	<resultMap type="org.tarena.entity.Dept" id="deptMap2">
+		<id property="deptno" column="deptno"/>
+		<result property="dname" column="dname"
+		jdbcType="VARCHAR" javaType="string"/>
+		<result property="loc" column="loc"
+		jdbcType="VARCHAR" javaType="string"/>
+		
+		<collection property="emps" column="deptno" javaType="java.util.ArrayList" ofType="org.tarena.entity.Emp">
+			<id property="empno" column="empno"/>
+			<result property="ename" column="ename"/>
+			<result property="sal" column="sal"/>
+			<result property="age" column="age"/>
+			<result property="deptno" column="deptno"/>
+		</collection>
+	</resultMap>
+ </mapper>
